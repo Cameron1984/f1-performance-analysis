@@ -1,5 +1,9 @@
 from data_loader import load_session
 
-desired_session = load_session(2024, "Silverstone", "R")
+year = int(input("Year of Grand Prix: "))
+race = input("Name of Race or Round Number: ")
+gp_session = str(input("Session: "))
 
-print(desired_session.results)
+session = load_session(year, race, gp_session)
+
+print(session.results)
