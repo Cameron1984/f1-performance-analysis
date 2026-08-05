@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "f1-analysis"
+version = "0.1.0"
+dependencies = [
+    "fastf1",
+    "pandas",
+    "matplotlib"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
