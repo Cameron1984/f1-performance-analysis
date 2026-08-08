@@ -1,11 +1,13 @@
 from pathlib import Path
+import pandas as pd
+import fastf1
 
 root = Path(__file__).resolve().parent.parent.parent
 
 cache_path = root / "cache"
 
 
-import fastf1
+
 
 fastf1.Cache.enable_cache(cache_path)
 
