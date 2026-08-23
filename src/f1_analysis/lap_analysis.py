@@ -37,3 +37,17 @@ def comapare_drivers_laps(laps, driver1, driver2):
     for value in delta:
         lap_deltas.append(round(value, 3))
     return lap_deltas
+
+def get_fastest_lap_data(laps, driver):
+    driver = driver.split(" ")[-1][0:3].upper()
+    best_lap = laps.pick_drivers(driver).pick_fastest()
+    return best_lap[
+        ["Driver",
+        "LapTime",
+        "Sector1Time",
+        "Sector2Time",
+        "Sector3Time",
+        "Compound",
+        "TyreLife"
+        ]
+    ]
