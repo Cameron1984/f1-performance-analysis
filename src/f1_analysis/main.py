@@ -17,10 +17,6 @@ results = session.results
 laps = session.laps
 
 d1 = "Max Verstappen"
-d2 = "Lance Stroll"
+d2 = "George Russell"
 delta = lap_analysis.comapare_laps(laps, d1, d2)
-for val in delta:
-    if val > 0:
-        print(f"{d1}'s best lap was +{val} slower than {d2}'s")
-    else:
-        print(f"{d1}'s best lap was {val} faster than {d2}'s")
+print(delta)

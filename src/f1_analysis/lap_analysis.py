@@ -28,20 +28,31 @@ def laps_to_seconds(laps):
 #Output delta difference between drivers laps
 def comapare_laps(laps, driver1, driver2):
     laps_in_seconds = laps_to_seconds(laps)
+    #Oscar Piastri => PIA
     driver1 = format_driver_name(driver1)
     driver2 = format_driver_name(driver2)
 
     driver1_laps = laps_in_seconds.pick_drivers(driver1)
     driver2_laps = laps_in_seconds.pick_drivers(driver2)
 
-    delta = (
-        driver2_laps["LapTimeSeconds"].reset_index(drop=True)
-        - driver1_laps["LapTimeSeconds"].reset_index(drop=True))
+    #Filter df for desired columns. d1_laps still df but has 2 columns only
+    driver1_laps = driver1_laps[["LapNumber", "LapTimeSeconds"]]
+    driver2_laps = driver2_laps[["LapNumber", "LapTimeSeconds"]]
 
-    lap_deltas = []
-    for value in delta:
-        lap_deltas.append(round(value, 3))
-    return lap_deltas
+    #Essentially inner join between two tables (df's) for each driver
+    comparison = driver1_laps.merge(
+        driver2_laps,
+        on="LapNumber",
+        suffixes=(f"_{driver1}", f"_{driver2}") #LapTimeSeconds => LapTimeSeconds_PIA
+    )
+
+    comparison["delta"] = (
+        comparison[f"LapTimeSeconds_{driver1}"]
+        - comparison[f"LapTimeSeconds_{driver2}"]
+    )
+    
+    return comparison["delta"]
+
 
 def get_fastest_lap_data(laps, driver):
     driver = driver.split(" ")[-1][0:3].upper()
