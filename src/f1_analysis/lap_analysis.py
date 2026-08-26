@@ -9,22 +9,27 @@ def format_time(laps):
     )
     return formatted_laps
 
+#Format driver names so full names return abbreviation - "Lewis Hamilton" => "HAM"
+def format_driver_name(driver):
+    return driver.split(" ")[-1][0:3].upper()
+
 #Display every lap for a specified driver
 def display_every_lap(laps, driver): 
     formatted_laps = format_time(laps)
-    return formatted_laps["LapTime"][formatted_laps["Driver"] == driver.split(" ")[-1][0:3].upper()]
+    return formatted_laps["LapTime"][formatted_laps["Driver"] == format_driver_name(driver)]
 
-#Convert lap times to seconds
+#Convert lap times to seconds to aid time comparisons
 def laps_to_seconds(laps):
+    #Copy to avoid editing original df
     laps_to_seconds = laps.copy()
     laps_to_seconds["LapTimeSeconds"] = laps_to_seconds["LapTime"].dt.total_seconds()
     return laps_to_seconds
 
 #Output delta difference between drivers laps
-def comapare_drivers_laps(laps, driver1, driver2):
+def comapare_laps(laps, driver1, driver2):
     laps_in_seconds = laps_to_seconds(laps)
-    driver1 = driver1.split(" ")[-1][0:3].upper()
-    driver2 = driver2.split(" ")[-1][0:3].upper()
+    driver1 = format_driver_name(driver1)
+    driver2 = format_driver_name(driver2)
 
     driver1_laps = laps_in_seconds.pick_drivers(driver1)
     driver2_laps = laps_in_seconds.pick_drivers(driver2)
@@ -51,3 +56,17 @@ def get_fastest_lap_data(laps, driver):
         "TyreLife"
         ]
     ]
+
+def compare_fastest_laps(laps, driver1, driver2):
+    laps_seconds = laps_to_seconds(laps)
+    driver1 = format_driver_name(driver1)
+    driver2 = format_driver_name(driver2)
+
+    driver1_best = laps_seconds.pick_drivers(driver1).pick_fastest()
+    driver2_best = laps_seconds.pick_drivers(driver2).pick_fastest()
+    
+    return round((driver1_best["LapTimeSeconds"] - driver2_best["LapTimeSeconds"]), 3)
+    
+
+    
+    

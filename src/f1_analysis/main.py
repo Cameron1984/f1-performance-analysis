@@ -16,6 +16,11 @@ session = load_session(2024, "Silverstone", "R")
 results = session.results
 laps = session.laps
 
-d = "Max Verstappen"
-
-print(lap_analysis.get_fastest_lap_data(laps, d))
+d1 = "Max Verstappen"
+d2 = "Lance Stroll"
+delta = lap_analysis.comapare_laps(laps, d1, d2)
+for val in delta:
+    if val > 0:
+        print(f"{d1}'s best lap was +{val} slower than {d2}'s")
+    else:
+        print(f"{d1}'s best lap was {val} faster than {d2}'s")
