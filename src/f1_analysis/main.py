@@ -18,5 +18,6 @@ laps = session.laps
 
 d1 = "Max Verstappen"
 d2 = "George Russell"
-delta = lap_analysis.comapare_laps(laps, d1, d2)
+lap = 2
+delta = lap_analysis.compare_fastest_laps(laps, d1, d2)
 print(delta)

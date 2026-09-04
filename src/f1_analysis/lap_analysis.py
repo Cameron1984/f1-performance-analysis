@@ -19,11 +19,15 @@ def display_every_lap(laps, driver):
     return formatted_laps["LapTime"][formatted_laps["Driver"] == format_driver_name(driver)]
 
 #Convert lap times to seconds to aid time comparisons
-def laps_to_seconds(laps):
+def laps_to_seconds(lap):
     #Copy to avoid editing original df
-    laps_to_seconds = laps.copy()
-    laps_to_seconds["LapTimeSeconds"] = laps_to_seconds["LapTime"].dt.total_seconds()
-    return laps_to_seconds
+    lap_in_seconds = lap.copy()
+
+    columns = ["LapTime", "Sector1Time", "Sector2Time", "Sector3Time"]
+    for column in columns:
+        lap_in_seconds[column] = lap_in_seconds[column].total_seconds()
+
+    return lap_in_seconds
 
 #Output delta difference between drivers laps
 def comapare_laps(laps, driver1, driver2):
@@ -69,14 +73,30 @@ def get_fastest_lap_data(laps, driver):
     ]
 
 def compare_fastest_laps(laps, driver1, driver2):
-    laps_seconds = laps_to_seconds(laps)
+    
     driver1 = format_driver_name(driver1)
     driver2 = format_driver_name(driver2)
 
-    driver1_best = laps_seconds.pick_drivers(driver1).pick_fastest()
-    driver2_best = laps_seconds.pick_drivers(driver2).pick_fastest()
+    driver1_best = laps.pick_drivers(driver1).pick_fastest()
+    driver2_best = laps.pick_drivers(driver2).pick_fastest()
+
+    driver1_best_secs = laps_to_seconds(driver1_best)
+    driver2_best_secs = laps_to_seconds(driver2_best)
     
-    return round((driver1_best["LapTimeSeconds"] - driver2_best["LapTimeSeconds"]), 3)
+    return round((driver1_best_secs["LapTime"] - driver2_best_secs["LapTime"]), 3)
+
+def compare_sectors(laps, driver1, driver2, lap):
+    laps_secs = laps_to_seconds(laps)
+    driver1_lap = laps_secs.pick_drivers(format_driver_name(driver1))
+    driver1_lap = driver1_lap[driver1_lap["LapNumber"] == lap]
+    driver2_lap = laps_secs.pick_drivers(format_driver_name(driver2))
+    driver2_lap = driver2_lap[driver2_lap["LapNumber"] == lap]
+
+    sectors = ["Sector1Time", "Sector2Time", "Sector3Time"]
+    deltas = driver1_lap[sectors].iloc[0] - driver2_lap[sectors].iloc[0]    
+    return deltas
+
+
     
 
     
