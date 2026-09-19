@@ -30,35 +30,7 @@ def display_every_lap(laps, driver):
     formatted_laps = format_time(laps)
     return formatted_laps["LapTime"][formatted_laps["Driver"] == format_driver_name(driver)]
 
-'''
-#Output delta difference between drivers laps
-def comapare_laps(laps, driver1, driver2):
-    laps_in_seconds = times_to_seconds(laps)
-    #Oscar Piastri => PIA
-    driver1 = format_driver_name(driver1)
-    driver2 = format_driver_name(driver2)
 
-    driver1_laps = laps_in_seconds.pick_drivers(driver1)
-    driver2_laps = laps_in_seconds.pick_drivers(driver2)
-
-    #Filter df for desired columns. d1_laps still df but has 2 columns only
-    driver1_laps = driver1_laps[["LapNumber", "LapTimeSeconds"]]
-    driver2_laps = driver2_laps[["LapNumber", "LapTimeSeconds"]]
-
-    #Essentially inner join between two tables (df's) for each driver
-    comparison = driver1_laps.merge(
-        driver2_laps,
-        on="LapNumber",
-        suffixes=(f"_{driver1}", f"_{driver2}") #LapTimeSeconds => LapTimeSeconds_PIA
-    )
-
-    comparison["delta"] = (
-        comparison[f"LapTimeSeconds_{driver1}"]
-        - comparison[f"LapTimeSeconds_{driver2}"]
-    )
-    
-    return comparison["delta"]
-'''
 def compare_laps(laps, driver1, driver2):
 
     driver1 = format_driver_name(driver1)
@@ -123,6 +95,16 @@ def compare_sectors(laps, driver1, driver2, lap):
     deltas = driver1_lap[sectors].iloc[0] - driver2_lap[sectors].iloc[0]    
 
     return times_to_seconds(deltas)
+
+def get_average_lap_time(laps, driver):
+    driver_laps = laps.pick_drivers(format_driver_name(driver))
+    times = times_to_seconds(driver_laps["LapTime"])
+
+    return round(times.mean(), 3)
+
+def compare_average_lap_time(laps, driver1, driver2):
+    return get_average_lap_time(laps, driver1) - get_average_lap_time(laps, driver2)
+    
 
 
     
