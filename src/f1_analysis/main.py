@@ -17,9 +17,7 @@ results = session.results
 laps = session.laps
 
 d1 = "Max Verstappen"
-d2 = "George Russell"
-lap = 2
-delta2 = lap_analysis.compare_fastest_laps(laps, d1, d2)
-print(delta2)
-delta = lap_analysis.compare_sectors(laps, d1, d2, lap)
-print(delta)
+d2 = "Lewis Hamilton"
+print(round(lap_analysis.compare_average_lap_time(laps, d1, d2), 3))
+print(round(lap_analysis.get_average_lap_time(laps, d1), 3))
+print(round(lap_analysis.get_average_lap_time(laps, d2), 3))
