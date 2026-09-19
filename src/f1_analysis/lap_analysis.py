@@ -106,7 +106,13 @@ def compare_average_lap_time(laps, driver1, driver2):
     return get_average_lap_time(laps, driver1) - get_average_lap_time(laps, driver2)
     
 
+##QUALI FEATURES##
 
+def get_fastest_sectors(laps, driver):
+    driver = format_driver_name(driver)
+    driver_laps = laps.pick_drivers(driver)
+    sectors = ["Sector1Time", "Sector2Time", "Sector3Time"]
+    return driver_laps[sectors].min()
     
 
     
