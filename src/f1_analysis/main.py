@@ -18,6 +18,4 @@ laps = session.laps
 
 d1 = "Max Verstappen"
 d2 = "Lewis Hamilton"
-print(round(lap_analysis.compare_average_lap_time(laps, d1, d2), 3))
-print(round(lap_analysis.get_average_lap_time(laps, d1), 3))
-print(round(lap_analysis.get_average_lap_time(laps, d2), 3))
+print(f"{d1} best sectors:\n{lap_analysis.get_fastest_sectors(laps, d1)}")
