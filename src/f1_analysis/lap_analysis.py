@@ -30,7 +30,7 @@ def display_every_lap(laps, driver):
     formatted_laps = format_time(laps)
     return formatted_laps["LapTime"][formatted_laps["Driver"] == format_driver_name(driver)]
 
-
+#Compare each lap for two drivers
 def compare_laps(laps, driver1, driver2):
 
     driver1 = format_driver_name(driver1)
@@ -56,6 +56,7 @@ def compare_laps(laps, driver1, driver2):
 
     return comparison["delta"]
 
+#Get fasters lap for a driver + other data
 def get_fastest_lap_data(laps, driver):
     driver = driver.split(" ")[-1][0:3].upper()
     best_lap = laps.pick_drivers(driver).pick_fastest()
@@ -70,6 +71,7 @@ def get_fastest_lap_data(laps, driver):
         ]
     ]
 
+
 def compare_fastest_laps(laps, driver1, driver2):
     
     driver1 = format_driver_name(driver1)
@@ -83,6 +85,7 @@ def compare_fastest_laps(laps, driver1, driver2):
     
     return round((driver1_best_secs - driver2_best_secs), 3)
 
+#Compare sectors for specific lap between two drivers - returning delta for all 3
 def compare_sectors(laps, driver1, driver2, lap):
     
     driver1_lap = laps.pick_drivers(format_driver_name(driver1))
@@ -96,11 +99,13 @@ def compare_sectors(laps, driver1, driver2, lap):
 
     return times_to_seconds(deltas)
 
+#Average lap time across a race
 def get_average_lap_time(laps, driver):
     driver_laps = laps.pick_drivers(format_driver_name(driver))
     times = times_to_seconds(driver_laps["LapTime"])
 
     return round(times.mean(), 3)
+
 
 def compare_average_lap_time(laps, driver1, driver2):
     return get_average_lap_time(laps, driver1) - get_average_lap_time(laps, driver2)
@@ -108,12 +113,29 @@ def compare_average_lap_time(laps, driver1, driver2):
 
 ##QUALI FEATURES##
 
+#Get fastest sectors in a Quali session
 def get_fastest_sectors(laps, driver):
     driver = format_driver_name(driver)
     driver_laps = laps.pick_drivers(driver)
     sectors = ["Sector1Time", "Sector2Time", "Sector3Time"]
     return driver_laps[sectors].min()
-    
 
-    
+#Add 3 fastest sectors to return a theoretical fastest lap
+def get_theoretical_fastest(laps, driver): 
+    sectors = get_fastest_sectors(laps, format_driver_name(driver))
+    sectors = times_to_seconds(sectors)
+    sectors_in_seconds = sum(sectors)
+
+    return round(sectors_in_seconds, 3)
+
+def compare_theoretcial_fastest_laps(laps, driver1, driver2):
+    driver_1_theoretcial = get_theoretical_fastest(laps, format_driver_name(driver1))
+    driver_2_theoretcial = get_theoretical_fastest(laps, format_driver_name(driver2))
+
+    theoretical_delta = round((driver_1_theoretcial - driver_2_theoretcial), 3)
+
+    return theoretical_delta
+
+
+
     
